@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "936722234144",
+    "project_id": "voiceinvoice-e8ae4",
+    "storage_bucket": "voiceinvoice-e8ae4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936722234144:android:da34d6d15dd75cf959b545",
+        "android_client_info": {
+          "package_name": "com.example.mynotes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH-lGbQRCRLLarzInhivlNr4pXAFq0ZpQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936722234144:android:fd30aa3de4a0f2ec59b545",
+        "android_client_info": {
+          "package_name": "com.example.voice_invoice"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH-lGbQRCRLLarzInhivlNr4pXAFq0ZpQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:936722234144:android:514006b74b109b8659b545",
+        "android_client_info": {
+          "package_name": "com.synodic.voiceinvoice"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH-lGbQRCRLLarzInhivlNr4pXAFq0ZpQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
