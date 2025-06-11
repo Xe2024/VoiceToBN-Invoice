@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -209,10 +211,7 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
                                                       left: Radius.circular(12),
                                                     ),
                                               ),
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: 12,
-                                                vertical: 0,
-                                              ),
+
                                               child: Icon(
                                                 Icons.email_outlined,
                                                 color: isFocused
@@ -279,6 +278,7 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
                                         return TextField(
                                           controller: _passwordController,
                                           obscureText: true,
+                                          obscuringCharacter: '*',
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontFamily: 'AbhayaLibreMedium',
@@ -293,7 +293,7 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
                                                     ),
                                               ),
                                               padding: EdgeInsets.symmetric(
-                                                horizontal: 12,
+                                                horizontal: 0,
                                                 vertical: 0,
                                               ),
                                               child: Icon(
@@ -362,7 +362,12 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
                                         fontSize: screenWidth * 0.035,
                                       ),
                                     ),
-                                    child: Text('Forgot password?'),
+                                    child: Text(
+                                      'Forgot Password?',
+                                      style: TextStyle(
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 SizedBox(height: screenHeight * 0.01),
@@ -372,17 +377,7 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
                                   child: ElevatedButton(
                                     onPressed: _isSigningUp
                                         ? null
-                                        : () async {
-                                            setState(() => _isSigningUp = true);
-                                            // Simulate loading
-                                            await Future.delayed(
-                                              Duration(seconds: 2),
-                                            );
-                                            setState(
-                                              () => _isSigningUp = false,
-                                            );
-                                            // Handle sign up logic here
-                                          },
+                                        : _signUpWithEmail,
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: _isSigningUp
                                           ? Colors.white
@@ -421,7 +416,7 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
                                               ),
                                               SizedBox(width: 12),
                                               Text(
-                                                'Signing Up...',
+                                                'Creating Account...',
                                                 style: TextStyle(
                                                   color: Colors.blue,
                                                   fontFamily:
@@ -431,7 +426,7 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
                                               ),
                                             ],
                                           )
-                                        : Text('Sign Up'),
+                                        : Text('Create Account'),
                                   ),
                                 ),
                                 SizedBox(height: screenHeight * 0.025),
@@ -471,45 +466,24 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
                                   child: GestureDetector(
                                     onTap: _isGoogleSigningIn
                                         ? null
-                                        : () async {
-                                            setState(
-                                              () => _isGoogleSigningIn = true,
-                                            );
-                                            await Future.delayed(
-                                              const Duration(seconds: 2),
-                                            );
-                                            setState(
-                                              () => _isGoogleSigningIn = false,
-                                            );
-                                            // Handle Google sign in logic here
-                                          },
+                                        : _signInWithGoogle,
                                     child: AnimatedContainer(
                                       duration: const Duration(
                                         milliseconds: 350,
                                       ),
                                       padding: EdgeInsets.all(
                                         _isGoogleSigningIn ? 2 : 0,
-                                      ), // Show border when loading
+                                      ),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(12),
                                         gradient: _isGoogleSigningIn
                                             ? LinearGradient(
                                                 colors: [
-                                                  Color(
-                                                    0xFF4285F4,
-                                                  ), // Google Blue
-                                                  Color(
-                                                    0xFF34A853,
-                                                  ), // Google Green
-                                                  Color(
-                                                    0xFFFBBC05,
-                                                  ), // Google Yellow
-                                                  Color(
-                                                    0xFFEA4335,
-                                                  ), // Google Red
-                                                  Color(
-                                                    0xFF4285F4,
-                                                  ), // Google Blue again for smoothness
+                                                  Color(0xFF4285F4),
+                                                  Color(0xFF34A853),
+                                                  Color(0xFFFBBC05),
+                                                  Color(0xFFEA4335),
+                                                  Color(0xFF4285F4),
                                                 ],
                                                 stops: [
                                                   0.0,
@@ -597,6 +571,64 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
         },
       ),
     );
+  }
+
+  Future<void> _signUpWithEmail() async {
+    setState(() => _isSigningUp = true);
+    try {
+      final credential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim(),
+          );
+      // If successful, navigation is handled by AuthGate in main.dart
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.message ?? 'Sign up failed')));
+    } finally {
+      setState(() => _isSigningUp = false);
+    }
+  }
+
+  Future<void> _signInWithGoogle() async {
+    setState(() => _isGoogleSigningIn = true);
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) {
+        setState(() => _isGoogleSigningIn = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Google sign-in was cancelled.')),
+        );
+        return;
+      }
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      // AuthGate will handle navigation
+    } on FirebaseAuthException catch (e) {
+      debugPrint('FirebaseAuthException: ${e.code} - ${e.message}');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Sign in failed: ${e.code}\n${e.message ?? ''}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } catch (e) {
+      debugPrint('Google sign-in error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('An unexpected error occurred: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      setState(() => _isGoogleSigningIn = false);
+    }
   }
 }
 

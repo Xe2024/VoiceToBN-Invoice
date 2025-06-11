@@ -7,31 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:936722234144:android:da34d6d15dd75cf959b545",
-        "android_client_info": {
-          "package_name": "com.example.mynotes"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBH-lGbQRCRLLarzInhivlNr4pXAFq0ZpQ"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:936722234144:android:fd30aa3de4a0f2ec59b545",
         "android_client_info": {
           "package_name": "com.example.voice_invoice"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "936722234144-mjgu8kgmh0jbntlpm3lletjtm24p3gt8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBH-lGbQRCRLLarzInhivlNr4pXAFq0ZpQ"
@@ -39,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "936722234144-mjgu8kgmh0jbntlpm3lletjtm24p3gt8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "936722234144-5o743d2pqd21s1tar8rcq84uert849sc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.synodic.voiceinvoice"
+              }
+            }
+          ]
         }
       }
     },
@@ -50,7 +48,20 @@
           "package_name": "com.synodic.voiceinvoice"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "936722234144-sd2ot4ccaumsnhu4qg05j42m3uhpg7mg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.synodic.voiceinvoice",
+            "certificate_hash": "ff3b390cb81d68943bfcc0f1be54a4f179361c40"
+          }
+        },
+        {
+          "client_id": "936722234144-mjgu8kgmh0jbntlpm3lletjtm24p3gt8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBH-lGbQRCRLLarzInhivlNr4pXAFq0ZpQ"
@@ -58,7 +69,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "936722234144-mjgu8kgmh0jbntlpm3lletjtm24p3gt8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "936722234144-5o743d2pqd21s1tar8rcq84uert849sc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.synodic.voiceinvoice"
+              }
+            }
+          ]
         }
       }
     }
