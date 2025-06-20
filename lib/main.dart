@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:voiceinvoice/views/Intermediate.dart';
 import 'package:voiceinvoice/views/Login.dart';
 import 'package:voiceinvoice/views/HomePage.dart';
 
@@ -27,6 +28,11 @@ class MyApp extends StatelessWidget {
   }
 }
 
+Future<bool> delay() async {
+  await Future.delayed(Duration(seconds: 2));
+  return true;
+}
+
 // AuthGate checks if user is logged in
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
@@ -40,7 +46,18 @@ class AuthGate extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         if (snapshot.hasData) {
-          return HomePage(); // User is logged in
+          return FutureBuilder(
+            future: delay(),
+            builder: (context, status) {
+              if (status.connectionState == ConnectionState.waiting) {
+                return Intermediate();
+              }
+              if (status.connectionState == ConnectionState.done) {
+                return HomePage();
+              }
+              return HomePage();
+            },
+          ); // User is logged in
         }
         return Login(); // User is NOT logged in
       },
