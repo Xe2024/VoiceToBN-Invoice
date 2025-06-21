@@ -39,6 +39,9 @@ dependencies:
   flutter_svg: ^2.1.0
   google_sign_in: ^6.3.0
   google_fonts: ^6.2.1
+  cloud_firestore: ^5.6.9
+  intl: ^0.20.2
+  sticky_headers: ^0.3.0+2
 
 dev_dependencies:
   flutter_test:
