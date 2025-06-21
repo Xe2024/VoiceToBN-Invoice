@@ -4,10 +4,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:voiceinvoice/views/Intermediate.dart';
 import 'package:voiceinvoice/views/Login.dart';
 import 'package:voiceinvoice/views/HomePage.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.light,
+    ),
+  );
   runApp(const MyApp());
 }
 
