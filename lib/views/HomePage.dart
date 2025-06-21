@@ -196,120 +196,135 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               // Bottom bar overlay
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: SafeArea(
-                  top: false,
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 300), // Animation duration
-                    curve: Curves.easeInOut, // Animation curve
-                    height: showAccount ? 250 : 80,
-                    // height: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(20),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color.fromARGB(
-                            255,
-                            7,
-                            7,
-                            7,
-                          ).withOpacity(0.6), // Lighter shadow for visibility
-                          blurRadius: 24,
-                          offset: Offset(0, -3), // Shadow upwards
-                          spreadRadius: 0,
-                        ),
-                      ],
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            IconButton(
-                              icon: Icon(
-                                Icons.account_circle,
-                                color: Colors.black,
-                                size: 32,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  showAccount = !showAccount;
-                                });
-                              },
+              // ...inside your Stack children:
+              StatefulBuilder(
+                builder: (context, setBarState) {
+                  return Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: SafeArea(
+                      top: false,
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 200),
+                        curve: Curves.easeInCubic,
+                        height: showAccount ? 250 : 80,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(20),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color.fromARGB(
+                                255,
+                                7,
+                                7,
+                                7,
+                              ).withOpacity(0.6),
+                              blurRadius: 24,
+                              offset: Offset(0, -3),
+                              spreadRadius: 0,
                             ),
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                shape: const CircleBorder(),
-                                padding: const EdgeInsets.all(
-                                  16,
-                                ), // Makes the button bigger
-                                backgroundColor:
-                                    Colors.black, // Button background color
-                                elevation: 10,
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  Icons.add,
-                                  color: Colors.white, // Icon color
-                                  size: 35, // Icon size (make it bigger)
-                                ),
-                              ),
-                            ),
-                            Icon(Icons.settings, color: Colors.black),
                           ],
                         ),
-
-                        if (showAccount)
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 5,
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SizedBox(height: 16),
-                                Text(
-                                  "Account Info",
-                                  style: TextStyle(
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.account_circle,
                                     color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                                    size: 32,
                                   ),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  "user@email.com",
-                                  style: TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                SizedBox(height: 16),
-                                ElevatedButton.icon(
                                   onPressed: () {
-                                    // Add your logout logic here
+                                    setBarState(() {
+                                      showAccount = !showAccount;
+                                    });
                                   },
-                                  icon: Icon(Icons.logout, color: Colors.white),
-                                  label: Text(
-                                    "Logout",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {},
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.red,
+                                    shape: const CircleBorder(),
+                                    padding: const EdgeInsets.all(16),
+                                    backgroundColor: Colors.black,
+                                    elevation: 5,
+                                  ),
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.add,
+                                      color: Colors.white,
+                                      size: 25,
+                                    ),
                                   ),
                                 ),
+                                Icon(Icons.settings, color: Colors.black),
                               ],
                             ),
-                          ),
-                      ],
+                            if (showAccount)
+                              Expanded(
+                                // padding: const EdgeInsets.only(top: 16.0),
+                                child: SingleChildScrollView(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 15),
+
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Account Info",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(height: 8),
+                                        Text(
+                                          "user@email.com",
+                                          style: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        SizedBox(height: 16),
+                                        ElevatedButton.icon(
+                                          onPressed: () {
+                                            // Add your logout logic here
+                                          },
+                                          icon: Icon(
+                                            Icons.logout,
+                                            color: Colors.white,
+                                          ),
+                                          label: Text(
+                                            "Logout",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ],
           ),
