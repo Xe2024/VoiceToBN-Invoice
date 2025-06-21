@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
+import 'dart:ui';
 
 class InvoiceSection {
   final DateTime date;
@@ -87,35 +88,75 @@ class HomePage extends StatelessWidget {
                                 .toList();
                             Sections.sort((a, b) => b.date.compareTo(a.date));
                             return ListView.builder(
+                              padding: EdgeInsets.only(bottom: 80),
                               itemCount: Sections.length,
                               itemBuilder: (context, sectionIndex) {
                                 final InvoiceSection section =
                                     Sections[sectionIndex];
                                 return StickyHeader(
-                                  header: Container(
-                                    color: Colors.black,
-                                    padding: EdgeInsets.all(8),
-                                    child: Text(
-                                      DateFormat(
-                                        "EEEE, MMMM d, yyyy",
-                                      ).format(section.date),
-                                      style: GoogleFonts.abhayaLibre(
-                                        color: Colors.white,
-                                        fontSize: 35,
+                                  header: ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                      12,
+                                    ), // Optional: rounded corners
+                                    child: BackdropFilter(
+                                      filter: ImageFilter.blur(
+                                        sigmaX: 10,
+                                        sigmaY: 10,
+                                      ),
+                                      child: Container(
+                                        width: double
+                                            .infinity, // Makes the header take full width
+                                        color: Colors.black.withOpacity(
+                                          0.3,
+                                        ), // Semi-transparent overlay
+                                        padding: EdgeInsets.all(8),
+                                        child: Text(
+                                          DateFormat(
+                                            "dd/MM/yy",
+                                          ).format(section.date),
+                                          style: GoogleFonts.abhayaLibre(
+                                            color: Colors.white,
+                                            fontSize: 35,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                  content: Column(
-                                    children: section.invoices.map((
-                                      invoiceDoc,
-                                    ) {
-                                      return ListTile(
-                                        title: Text(
-                                          invoiceDoc["name"] ?? '',
-                                          style: TextStyle(color: Colors.white),
+                                  content: GridView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: section.invoices.length,
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount:
+                                              2, // Number of cards per row
+                                          crossAxisSpacing: 16,
+                                          mainAxisSpacing: 16,
+                                          childAspectRatio:
+                                              1.2, // Adjust for card shape
+                                        ),
+                                    itemBuilder: (context, index) {
+                                      final invoiceDoc =
+                                          section.invoices[index];
+                                      return Card(
+                                        color: Colors.grey[900],
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
+                                        ),
+                                        child: Container(
+                                          padding: EdgeInsets.all(24),
+                                          child: Text(
+                                            invoiceDoc["name"] ?? '',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                            ),
+                                          ),
                                         ),
                                       );
-                                    }).toList(),
+                                    },
                                   ),
                                 );
                               },
