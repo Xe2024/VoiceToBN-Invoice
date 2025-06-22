@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 import 'dart:ui';
 import 'package:flutter/services.dart';
+import 'package:voiceinvoice/views/Login.dart';
 
 class InvoiceSection {
   final DateTime date;
@@ -21,6 +24,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool showAccount = false;
+
+  bool isCapturingAudio = false;
+  String invoiceName = "";
+  final user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -237,17 +244,26 @@ class _HomePageState extends State<HomePage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.account_circle,
-                                    color: Colors.black,
-                                    size: 32,
-                                  ),
-                                  onPressed: () {
+                                GestureDetector(
+                                  onTap: () {
                                     setBarState(() {
                                       showAccount = !showAccount;
                                     });
                                   },
+                                  child: CircleAvatar(
+                                    radius: 20, // Adjust size as needed
+                                    backgroundColor: Colors.grey[300],
+                                    backgroundImage: user?.photoURL != null
+                                        ? NetworkImage(user!.photoURL!)
+                                        : null,
+                                    child: user?.photoURL == null
+                                        ? Icon(
+                                            Icons.account_circle,
+                                            color: Colors.black,
+                                            size: 32,
+                                          )
+                                        : null,
+                                  ),
                                 ),
                                 ElevatedButton(
                                   onPressed: () {},
@@ -280,7 +296,7 @@ class _HomePageState extends State<HomePage> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          "Account Info",
+                                          user?.displayName ?? "Fetch_Error",
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 18,
@@ -289,7 +305,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         SizedBox(height: 8),
                                         Text(
-                                          "user@email.com",
+                                          user?.email ?? "email_fetch_error",
                                           style: TextStyle(
                                             color: Colors.black54,
                                             fontSize: 16,
@@ -297,8 +313,19 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         SizedBox(height: 16),
                                         ElevatedButton.icon(
-                                          onPressed: () {
-                                            // Add your logout logic here
+                                          onPressed: () async {
+                                            await FirebaseAuth.instance
+                                                .signOut();
+                                            await GoogleSignIn().signOut();
+                                            // Optionally, navigate to login screen and remove all previous routes:
+                                            Navigator.of(
+                                              context,
+                                            ).pushAndRemoveUntil(
+                                              MaterialPageRoute(
+                                                builder: (context) => Login(),
+                                              ), // import your Login page
+                                              (route) => false,
+                                            );
                                           },
                                           icon: Icon(
                                             Icons.logout,
